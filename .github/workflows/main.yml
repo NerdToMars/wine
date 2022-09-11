@@ -13,6 +13,7 @@ jobs:
         run: |
           cml ci
           echo "# run exp"
+          python -m pip install -r ./requirements.txt
           dvc pull
           dvc repro
 
