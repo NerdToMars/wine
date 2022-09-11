@@ -2,8 +2,10 @@ name: CML Report
 on: push
 jobs:
   run:
-    runs-on: [self-hosted]
+    runs-on: [ubuntu-latest]
     steps:
+      - uses: iterative/setup-cml@v1
+      - uses: iterative/setup-dvc@v1
       - uses: actions/checkout@v3
         with:
           fetch-depth: 2
@@ -13,7 +15,6 @@ jobs:
         run: |
           cml ci
           echo "# run exp"
-          python -m pip install -r ./requirements.txt
           dvc pull
           dvc repro
 
