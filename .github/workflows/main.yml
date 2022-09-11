@@ -1,25 +1,41 @@
-name: model-wine-quality
-on: [push]
+name: CML Report
+on: push
 jobs:
   run:
     runs-on: [ubuntu-latest]
-    container: docker://dvcorg/cml-py3:latest
     steps:
-      - uses: actions/checkout@v2
-      - name: cml_run
+      - uses: iterative/setup-cml@v1
+      - uses: iterative/setup-dvc@v1
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - name: Generate metrics report
         env:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          cml ci
+          if [ $GITHUB_REF = refs/heads/main ]; then
+            PREVIOUS_REF=HEAD~1
+          else
+            PREVIOUS_REF=main
+          fi
+          echo "# run exp"
+          dvc repro
 
-          # Your ML workflow goes here
-          pip install -r requirements.txt
-          python train.py
-          
-          echo "## Model metrics" > report.md
-          cat metrics.txt >> report.md
-          
-          echo "## Data viz" >> report.md
-          cml-publish feature_importance.png --md >> report.md
-          cml-publish residuals.png --md >> report.md
-          
-          cml-send-comment report.md
+          echo "# CML Report" > report.md
+          echo "## Plots" >> report.md
+          dvc plots diff $PREVIOUS_REF workspace \
+            --show-vega --targets evaluation/plots/precision_recall.json > vega.json
+          vl2svg vega.json prc.svg
+          cml publish prc.svg --title "Precision & Recall" --md >> report.md
+
+          dvc plots diff $PREVIOUS_REF workspace \
+            --show-vega --targets evaluation/plots/confusion_matrix.json > vega.json
+          vl2svg vega.json confusion.svg
+          cml publish confusion.svg --title "Confusion Matrix" --md >> report.md
+
+          echo "## Metrics and Params" >> report.md
+          echo "### $PREVIOUS_REF → workspace" >> report.md
+          dvc exp diff $PREVIOUS_REF --show-md >> report.md
+
+          cml send-comment report.md
