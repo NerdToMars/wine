@@ -13,10 +13,10 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [ $GITHUB_REF = refs/heads/main ]; then
+          if [ $GITHUB_REF = refs/heads/master ]; then
             PREVIOUS_REF=HEAD~1
           else
-            PREVIOUS_REF=main
+            PREVIOUS_REF=HEAD
           fi
 
           echo "# CML Report" > report.md
