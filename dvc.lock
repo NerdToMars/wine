@@ -30,19 +30,19 @@ stages:
       size: 2490
     params:
       params.yaml:
-        featurize.max_features: 200
+        featurize.max_features: 100
         featurize.ngrams: 2
     outs:
     - path: data/features
-      md5: 24776f4aaed10ce1bd6e6e91fd003d8c.dir
-      size: 4451098
+      md5: 9202bf271b063e36efe33700e553fcef.dir
+      size: 3295678
       nfiles: 2
   train:
     cmd: python src/train.py data/features model.pkl
     deps:
     - path: data/features
-      md5: 24776f4aaed10ce1bd6e6e91fd003d8c.dir
-      size: 4451098
+      md5: 9202bf271b063e36efe33700e553fcef.dir
+      size: 3295678
       nfiles: 2
     - path: src/train.py
       md5: c3961d777cfbd7727f9fde4851896006
@@ -54,40 +54,40 @@ stages:
         train.seed: 20170428
     outs:
     - path: model.pkl
-      md5: cd4efc5d6be99e3ea51d71214824b2cf
-      size: 2072614
+      md5: 71fa4c5d016f2fc1c00a6fd3d2385e57
+      size: 1874902
       isexec: true
   evaluate:
     cmd: python src/evaluate.py model.pkl data/features
     deps:
     - path: data/features
-      md5: 24776f4aaed10ce1bd6e6e91fd003d8c.dir
-      size: 4451098
+      md5: 9202bf271b063e36efe33700e553fcef.dir
+      size: 3295678
       nfiles: 2
     - path: model.pkl
-      md5: cd4efc5d6be99e3ea51d71214824b2cf
-      size: 2072614
+      md5: 71fa4c5d016f2fc1c00a6fd3d2385e57
+      size: 1874902
     - path: src/evaluate.py
       md5: 44e714021a65edf881b1716e791d7f59
       size: 2346
     outs:
     - path: evaluation.json
-      md5: 59110715898dfaa398bc097f1054be15
-      size: 73
+      md5: b07f807e73ad5e67347a6956c671c3aa
+      size: 72
       isexec: true
     - path: evaluation/importance.png
-      md5: 82329d9bd181056fe2e3922bb8a915f1
-      size: 33921
+      md5: 629d6f80e9fc5cfa2b3d872a4a5cbd1c
+      size: 32683
       isexec: true
     - path: evaluation/plots/confusion_matrix.json
-      md5: 4011e71cbb77f600f8de73f3146dc4ae
+      md5: b99494fb5d522a16def52938bef636c2
       size: 243331
       isexec: true
     - path: evaluation/plots/precision_recall.json
-      md5: 184dfc7be42f618660d65b5a7f2f50cc
-      size: 135046
+      md5: 1a8e2a78fa5608d46c985ea850276598
+      size: 133445
       isexec: true
     - path: evaluation/plots/roc.json
-      md5: bdf9e1822fa6fa6df6fb713f5a69cca2
-      size: 141609
+      md5: e88b258d360279efa3eab6b68716a874
+      size: 159030
       isexec: true
