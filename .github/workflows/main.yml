@@ -2,25 +2,29 @@ name: CML Report
 on: push
 jobs:
   run:
-    runs-on: [ubuntu-latest]
+    runs-on: [self-hosted]
     steps:
-      - uses: iterative/setup-cml@v1
-      - uses: iterative/setup-dvc@v1
       - uses: actions/checkout@v3
         with:
           fetch-depth: 2
-      - name: Generate metrics report
+      - name: Train and Eval
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cml ci
+          echo "# run exp"
+          dvc pull
+          dvc repro
+
+      - name: Generate metrics report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
           if [ $GITHUB_REF = refs/heads/main ]; then
             PREVIOUS_REF=HEAD~1
           else
             PREVIOUS_REF=main
           fi
-          echo "# run exp"
-          dvc repro
 
           echo "# CML Report" > report.md
           echo "## Plots" >> report.md
