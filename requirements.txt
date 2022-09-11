@@ -1,9 +1,9 @@
-dvclive==0.10.0
-matplotlib==3.5.3
-numpy==1.23.2
-pandas==1.4.3
-PyYAML==6.0
-scikit_learn==1.1.2
-scipy==1.9.1
-seaborn==0.11.2
+dvclive
+matplotlib
+numpy
+pandas
+PyYAML
+scikit_learn
+scipy
+seaborn
 dvc-gdrive
