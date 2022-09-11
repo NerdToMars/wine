@@ -3,7 +3,7 @@ frozen: true
 deps:
 - path: data.xml
   repo:
-    url: git@github.com:NerdToMars/wine_data.git
+    url: https://github.com/NerdToMars/wine_data.git
     rev: v0.1
     rev_lock: e6ed3c40ac4f03d9387791da1ced5acced35ae9b
 outs:
