@@ -1,0 +1,93 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py data/data.xml
+    deps:
+    - path: data/data.xml
+      md5: 079fbd15fa2c32c539c4c4e3675b514a
+      size: 28890194
+    - path: src/prepare.py
+      md5: f09ea0c15980b43010257ccb9f0055e2
+      size: 1576
+    params:
+      params.yaml:
+        prepare.seed: 20170428
+        prepare.split: 0.2
+    outs:
+    - path: data/prepared
+      md5: 2fe72f304d64c28867d884e798568460.dir
+      size: 16874726
+      nfiles: 2
+  featurize:
+    cmd: python src/featurization.py data/prepared data/features
+    deps:
+    - path: data/prepared
+      md5: 2fe72f304d64c28867d884e798568460.dir
+      size: 16874726
+      nfiles: 2
+    - path: src/featurization.py
+      md5: e0265fc22f056a4b86d85c3056bc2894
+      size: 2490
+    params:
+      params.yaml:
+        featurize.max_features: 100
+        featurize.ngrams: 2
+    outs:
+    - path: data/features
+      md5: 9202bf271b063e36efe33700e553fcef.dir
+      size: 3295678
+      nfiles: 2
+  train:
+    cmd: python src/train.py data/features model.pkl
+    deps:
+    - path: data/features
+      md5: 9202bf271b063e36efe33700e553fcef.dir
+      size: 3295678
+      nfiles: 2
+    - path: src/train.py
+      md5: c3961d777cfbd7727f9fde4851896006
+      size: 967
+    params:
+      params.yaml:
+        train.min_split: 0.01
+        train.n_est: 50
+        train.seed: 20170428
+    outs:
+    - path: model.pkl
+      md5: 71fa4c5d016f2fc1c00a6fd3d2385e57
+      size: 1874902
+      isexec: true
+  evaluate:
+    cmd: python src/evaluate.py model.pkl data/features
+    deps:
+    - path: data/features
+      md5: 9202bf271b063e36efe33700e553fcef.dir
+      size: 3295678
+      nfiles: 2
+    - path: model.pkl
+      md5: 71fa4c5d016f2fc1c00a6fd3d2385e57
+      size: 1874902
+    - path: src/evaluate.py
+      md5: 44e714021a65edf881b1716e791d7f59
+      size: 2346
+    outs:
+    - path: evaluation.json
+      md5: b07f807e73ad5e67347a6956c671c3aa
+      size: 72
+      isexec: true
+    - path: evaluation/importance.png
+      md5: 629d6f80e9fc5cfa2b3d872a4a5cbd1c
+      size: 32683
+      isexec: true
+    - path: evaluation/plots/confusion_matrix.json
+      md5: b99494fb5d522a16def52938bef636c2
+      size: 243331
+      isexec: true
+    - path: evaluation/plots/precision_recall.json
+      md5: 1a8e2a78fa5608d46c985ea850276598
+      size: 133445
+      isexec: true
+    - path: evaluation/plots/roc.json
+      md5: e88b258d360279efa3eab6b68716a874
+      size: 159030
+      isexec: true

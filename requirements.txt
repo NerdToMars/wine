@@ -1,5 +1,9 @@
-pandas
-sklearn
+dvclive
 matplotlib
-seaborn
 numpy
+pandas
+PyYAML
+scikit_learn
+scipy
+seaborn
+dvc-gdrive

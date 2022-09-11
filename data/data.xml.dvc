@@ -1,0 +1,12 @@
+md5: 8ad921bd158a9b447da32d275f72eb98
+frozen: true
+deps:
+- path: data.xml
+  repo:
+    url: https://github.com/NerdToMars/wine_data.git
+    rev: v0.1
+    rev_lock: e6ed3c40ac4f03d9387791da1ced5acced35ae9b
+outs:
+- md5: 079fbd15fa2c32c539c4c4e3675b514a
+  size: 28890194
+  path: data.xml
